@@ -1,42 +1,18 @@
-const express = require('express');
-const _ = require('underscore');
-
-var port = process.env.PORT || 8080;
-var animals = {
-    "cat": "hello",
-    "dog": "bark",
-    "eel": "hiss",
-    "bear": "growl",
-    "frog": "croak",
-    "lion": "roar"
-}
-
-function getAnimal() {
-  return animal = _.sample(Object.entries(animals));
-}
-
-const app = express();
+var express = require('express');
+var app = express();
+var _ = require('underscore');
+var sample = require('lodash.sample');
+var animals = [ "aardvark", "bear", "cat", "eel", "frog" ]
+var sounds  = [ "bark", "meow", "squeak", "roar", "hiss" ]
 
 app.get('/', function(req, res){
-  const [animal_name, sound] = getAnimal();
-  res.writeHead(200, { 'Content-Type': 'text/html' });
-  res.write(`George Orwell had a farm.<br />
-E-I-E-I-O<br />
-And on his farm he had a ${ animal_name }.<br />
-E-I-E-I-O<br />
-With a ${ sound }-${ sound } here.<br />
-And a ${ sound }-${ sound } there.<br />
-Here a ${ sound }, there a ${ sound }.<br />
-Everywhere a ${ sound }-${ sound }.<br />`);
-      res.end();
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.write(`The ${ _.sample(animals) } went ${ _.sample(sounds) }.`);
+    res.end();
 });
 
-app.get('/api', function(req, res){
-  res.writeHead(200, { 'Content-Type': 'application/json' });
-  res.write(JSON.stringify(animals));
-  res.end();
-})
+var port = process.env.PORT || 8080;
+console.log(`Launching server on http://localhost:${ port }`)
+app.listen(port);
 
-module.exports =  app.listen(port, () => {
-  console.log(`Launching server on http://localhost:${ port }`)
-});
+module.exports = app;
